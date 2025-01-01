@@ -1,0 +1,33 @@
+#!/bin/bash
+# Update the system
+apt-get update -y
+apt-get upgrade -y
+
+# Install required dependencies
+apt-get install -y apt-transport-https ca-certificates curl software-properties-common
+
+# Add Docker’s official GPG key
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+
+# Set up the Docker repository
+add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) \
+   stable"
+
+# Install Docker
+apt-get update -y
+apt-get install -y docker-ce docker-ce-cli containerd.io
+
+# Start and enable the Docker service
+systemctl start docker
+systemctl enable docker
+
+# Optionally, add the default user (e.g., ubuntu) to the docker group for non-root access
+usermod -aG docker ubuntu
+
+# Print Docker version to verify installation
+docker --version
+
+# Pull a Docker image as a test (optional)
+docker pull hello-world
